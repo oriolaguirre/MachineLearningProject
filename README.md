@@ -1,4 +1,17 @@
 MachineLearningProject: Predicción del Tiempo con Aprendizaje Automático
+
+
+
+![image](https://github.com/user-attachments/assets/21e57145-78a0-47a8-8cd9-5768c8fe7542)
+
+
+
+
+
+
+
+
+
 Este proyecto tiene como objetivo desarrollar modelos de aprendizaje automático capaces de predecir variables meteorológicas clave a partir de un conjunto de datos multiciudad. Utilizando técnicas tanto de regresión como de clasificación, exploraremos la evolución del clima en diferentes regiones de Europa mediante variables meteorológicas históricas. El dataset abarca ciudades como Basel, Budapest, De Bilt, Dresden, Heathrow o Roma, entre otras.
 
 📁 Datos
