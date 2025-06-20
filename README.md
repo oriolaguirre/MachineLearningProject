@@ -49,8 +49,6 @@ Este proyecto también servirá como base para futuras ampliaciones como:
 
 Predicciones a múltiples días vista
 
-Incorporación de datos exógenos (p. ej. índices ENSO, NAO)
-
 Más adelantese cargara un dataset de imagenes para clasificarvalores en funcion de estas
 
 Visualización interactiva con dashboards
