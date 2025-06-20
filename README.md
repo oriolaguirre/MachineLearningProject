@@ -2,7 +2,8 @@ MachineLearningProject: Predicción del Tiempo con Aprendizaje Automático
 
 
 
-![image](https://github.com/user-attachments/assets/21e57145-78a0-47a8-8cd9-5768c8fe7542)
+![image](https://github.com/user-attachments/assets/35e106bc-52e7-46e4-a68b-eb24f790b61e)
+
 
 
 
