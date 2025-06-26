@@ -1,8 +1,23 @@
-# MachineLearningProjectPredicción del Tiempo con Machine Learning
-Este proyecto tiene como objetivo desarrollar un modelo de aprendizaje automático para la predicción del tiempo utilizando un conjunto de datos meteorológicos multiciudad. El dataset contiene observaciones diarias de numerosas variables relacionadas con el clima (cobertura nubosa, radiación solar, precipitaciones, temperaturas, entre otros) recogidas en distintas ciudades de Europa como Basel, Budapest, De Bilt, Dresden, Heathrow, Roma, entre otras.
+MachineLearningProject: Predicción del Tiempo con Aprendizaje Automático
+
+
+
+![image](https://github.com/user-attachments/assets/35e106bc-52e7-46e4-a68b-eb24f790b61e)
+
+
+
+
+
+
+
+
+
+
+Este proyecto tiene como objetivo desarrollar modelos de aprendizaje automático capaces de predecir variables meteorológicas clave a partir de un conjunto de datos multiciudad. Utilizando técnicas tanto de regresión como de clasificación, exploraremos la evolución del clima en diferentes regiones de Europa mediante variables meteorológicas históricas. El dataset abarca ciudades como Basel, Budapest, De Bilt, Dresden, Heathrow o Roma, entre otras.
 
 📁 Datos
-El conjunto de datos incluye variables como:
+
+El conjunto de datos incluye observaciones diarias con las siguientes variables:
 
 Temperatura media, mínima y máxima
 
@@ -20,39 +35,45 @@ Velocidad del viento y ráfagas
 
 Precipitaciones
 
-Cada observación está identificada por una fecha (DATE) y el mes (MONTH), y contiene las variables anteriores para múltiples estaciones meteorológicas europeas.
+Cada observación contiene una marca temporal (fecha y mes) y está asociada a una estación meteorológica específica.
 
 🧠 Objetivo
-Desarrollar modelos predictivos capaces de anticipar variables meteorológicas clave (como temperatura, precipitación o radiación solar) en función de los datos históricos multivariable y multiciudad. Este proyecto también servirá como base para integrar futuras mejoras, como:
 
-Predicción a varios días vista
+Desarrollar modelos predictivos multiciudad capaces de anticipar fenómenos meteorológicos clave:
 
-Incorporación de series temporales externas (como fenómenos climáticos globales)
+Modelos de regresión para estimar valores numéricos como temperatura o radiación solar.
 
-Interfaz visual interactiva para consulta del tiempo previsto
+Modelos de clasificación para predecir eventos discretos como presencia/ausencia de precipitaciones, clasificación de días soleados/nublados, o detección de condiciones extremas.
+
+Este proyecto también servirá como base para futuras ampliaciones como:
+
+Predicciones a múltiples días vista
+
+Más adelantese cargara un dataset de imagenes para clasificarvalores en funcion de estas
+
+Visualización interactiva con dashboards
 
 🛠️ Tecnologías previstas
+
 Python
 
-Pandas y NumPy
+Pandas, NumPy
 
 Scikit-learn
 
-XGBoost / LightGBM
+Matplotlib / Seaborn
 
-Visualización con Matplotlib / Seaborn
-
-(en el futuro: dashboard con Streamlit o Plotly Dash)
 
 🚀 Próximos pasos
+
 Análisis exploratorio de datos (EDA)
 
-Preparación y limpieza del dataset
+Preparación, limpieza y transformación del dataset
 
-Selección de variables relevantes
+Ingeniería de características y selección de variables
 
-Entrenamiento de modelos regresivos
+Entrenamiento de modelos de regresión y clasificación
 
-Evaluación del rendimiento
+Evaluación mediante métricas apropiadas (RMSE, Accuracy, F1-score...)
 
-Desarrollo de la interfaz de usuario para predicción visual
+Desarrollo de una interfaz visual para mostrar predicciones meteorológicas
