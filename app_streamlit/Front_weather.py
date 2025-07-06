@@ -51,11 +51,12 @@ def set_custom_background():
 set_custom_background()
 
 
-df = pd.read_csv('C:/Users/34666/Desktop/Oriol bootcamp the bridge/Curso/MachineLearningProject/weather_prediction_dataset.csv')
+df = pd.read_csv('C:/Users/34666/Desktop/Oriol bootcamp the bridge/Curso/MachineLearningProject/MachineLearningProject/Data/raw/weather_prediction_dataset.csv')
 # Cargar modelo y codificador entrenados
-knn = joblib.load("modelo_knn.pkl")
-le = joblib.load("label_encoder.pkl")
-rndf = joblib.load("RandomForrest.pkl")
+knn = joblib.load("../Models/modelo_knn.pkl")
+le = joblib.load("../Models/label_encoder.pkl")
+rndf = joblib.load("../Models/RandomForrest.pkl")
+Regressor = joblib.load("../Models/modelo_regressor.pkl")
 
 ciudades = sorted(set(col.split('_')[0] for col in df.columns if '_' in col and col != 'DATE' and col != 'MONTH'))
 
@@ -65,7 +66,7 @@ ciudad_seleccionada = st.selectbox("Selecciona una ciudad", ciudades)
 # Filtrar columnas que pertenecen a la ciudad seleccionada
 columnas_ciudad = [col for col in df.columns if col.startswith(ciudad_seleccionada + "_") or col in ['DATE', 'MONTH']]
 df_ciudad = df[columnas_ciudad]
-df_ciudad.to_csv("df_ciudad_filtrada.csv", index=False)
+df_ciudad.to_csv("../Data/processed/df_ciudad_filtrada.csv", index=False)
 
 humedad = st.slider("Humedad (%)", 0.0, 100.0, 75.0)
 presion = st.number_input("Presión (hPa)", value=1013.2)
@@ -90,11 +91,11 @@ if st.button("Predecir estación"):
         if estacion == 0:
             return "invierno"   # Enero
         elif estacion == 1:
-         return "Primavera"  # Abril
+         return "otoño"  # Abril
         elif estacion == 2:
-                return "verano"  # Julio
+                return "Primavera"  # Julio
         elif estacion == 3:
-            return "Otoño" # Octubre
+            return "verano" # Octubre
 
     estacionkn1 = estacion_a_mes(pred_num)
     estacionrf1 = estacion_a_mes(pred_num3)
@@ -108,6 +109,25 @@ if st.button("Predecir estación"):
 k = st.slider("Selecciona el valor de k para KNN", min_value=1, max_value=20, value=5, step=1)
 
 
+date = st.date_input("mete el dia",value=None)
+
+if date:
+    mes = date.month
+    dia_del_ano = date.timetuple().tm_yday
+    dia_semana = date.weekday()
+
+st.write(f"Mes: {mes}, Día del año: {dia_del_ano}, Día de la semana: {dia_semana}")
+
+if st.button("Predecir tiempo"):
+
+    diaseleccionado = np.array([[mes, dia_del_ano, dia_semana]])
+    pred_num = Regressor.predict(diaseleccionado)[0]
+    st.subheader("🌤️ Predicción del clima")
+    st.write(f"🌡️ Temperatura media: {pred_num[0]:.1f} °C")
+    st.write(f"🌡️ Temperatura mínima: {pred_num[1]:.1f} °C")
+    st.write(f"🌡️ Temperatura máxima: {pred_num[2]:.1f} °C")
+    st.write(f"🌧️ Precipitación estimada: {pred_num[3]:.1f} mm")
+
 
 with open("valor_k.json", "w") as f:
     json.dump({"k": k}, f)
@@ -118,7 +138,7 @@ with open("valor_k.json", "r") as f:
 # Extraer los valores
 k = data["k"]
 
-st.write(f"📥 Valor de k cargado: {k}")
+
 
 
 import streamlit as st
