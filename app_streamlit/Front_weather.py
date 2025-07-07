@@ -3,6 +3,7 @@ import pandas as pd
 import json
 import numpy as np
 import joblib
+from tensorflow.keras.models import load_model
 
 def set_custom_background():
     st.markdown(
@@ -53,6 +54,10 @@ set_custom_background()
 
 df = pd.read_csv('C:/Users/34666/Desktop/Oriol bootcamp the bridge/Curso/MachineLearningProject/MachineLearningProject/Data/raw/weather_prediction_dataset.csv')
 # Cargar modelo y codificador entrenados
+def cargar_modelo():
+    return load_model("../Models/modelo_meteorologico.h5")
+
+modelo = cargar_modelo()
 knn = joblib.load("../Models/modelo_knn.pkl")
 le = joblib.load("../Models/label_encoder.pkl")
 rndf = joblib.load("../Models/RandomForrest.pkl")
@@ -115,8 +120,7 @@ if date:
     mes = date.month
     dia_del_ano = date.timetuple().tm_yday
     dia_semana = date.weekday()
-
-st.write(f"Mes: {mes}, Día del año: {dia_del_ano}, Día de la semana: {dia_semana}")
+    st.write(f"Mes: {mes}, Día del año: {dia_del_ano}, Día de la semana: {dia_semana}")
 
 if st.button("Predecir tiempo"):
 
@@ -161,3 +165,93 @@ def set_background(image_url):
 set_background("https://hydrosphere.co.uk/wp-content/uploads/2020/03/weather_predictions-e1584356162376.jpg")
 
 
+import streamlit as st
+from PIL import Image
+import requests
+from io import BytesIO
+
+# Selector de fecha
+fecha = st.date_input("Selecciona una fecha", value=None)
+
+if fecha:
+    fecha_str = fecha.strftime("%Y-%m-%d")
+
+
+    bbox = "46.8,6.8,48.0,8.2"
+    print(ciudad_seleccionada)
+
+    # Coordenadas aproximadas de Basel
+    if ciudad_seleccionada.lower() == "basel":
+        bbox = "46.8,6.8,48.0,8.2"
+    elif ciudad_seleccionada.lower() == "budapest":   
+        bbox = "46.8,18.3,48.3,20.3"
+    elif ciudad_seleccionada.lower() == "malmo":
+        bbox = "55.2,12.4,56.0,13.6"
+    elif ciudad_seleccionada.lower() == "roma":
+        bbox = "41.2,11.5,42.3,13.0"
+    elif ciudad_seleccionada.lower() == "heathrow":
+        bbox = "51.2,-0.8,51.8,0.6"
+    else:
+        print("fallo")    
+   
+
+
+    # Construir URL de la imagen satelital
+    url = f"https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=MODIS_Terra_CorrectedReflectance_TrueColor&STYLES=&FORMAT=image/jpeg&CRS=EPSG:4326&BBOX={bbox}&WIDTH=512&HEIGHT=512&TIME={fecha_str}"
+
+    # Descargar y mostrar
+    response = requests.get(url)
+    if response.status_code == 200:
+        img = Image.open(BytesIO(response.content))
+        st.image(img, caption=f"Imagen satelital de Basel ({fecha_str})")
+    else:
+        st.error("No se pudo obtener la imagen para esa fecha.")
+
+
+
+import requests
+from PIL import Image
+from io import BytesIO
+
+#A partir de aquí es la predicción de si esta nublado o no, para ello se guarda la imagen satelital y la evalua con el modelo
+
+if st.button("Predecir satelite"):
+
+    def obtener_imagen_satelital(bbox, fecha):
+        url = f"https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi"
+        params = {
+            "SERVICE": "WMS",
+            "REQUEST": "GetMap",
+            "VERSION": "1.3.0",
+            "LAYERS": "MODIS_Terra_CorrectedReflectance_TrueColor",
+            "STYLES": "",
+            "FORMAT": "image/jpeg",
+            "CRS": "EPSG:4326",
+            "BBOX": bbox,
+            "WIDTH": 256,
+            "HEIGHT": 256,
+            "TIME": fecha
+        }
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            return Image.open(BytesIO(response.content))
+        else:
+            st.error("No se pudo obtener la imagen satelital.")
+            return None
+        
+    def predecir_con_modelo(imagen, modelo):
+        img_resized = imagen.resize((64, 64)).convert("RGB")
+        img_array = np.array(img_resized) / 255.0
+        img_array = np.expand_dims(img_array, axis=0)
+
+        pred = modelo.predict(img_array)
+        clases = ['despejado', 'muy_nublado', 'nublado', 'otros']
+        clase = clases[np.argmax(pred)]#estoy sacando la clase de la prediccion
+        confianza = np.max(pred)
+        return clase, confianza
+
+    imagen = obtener_imagen_satelital(bbox, fecha_str)
+
+    if imagen:
+        clase, confianza = predecir_con_modelo(imagen, modelo)
+        st.markdown(f"### Predicción: **{clase}** ({confianza:.2%} de confianza)")
