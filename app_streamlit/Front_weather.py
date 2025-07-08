@@ -4,6 +4,10 @@ import json
 import numpy as np
 import joblib
 from tensorflow.keras.models import load_model
+import os
+
+
+
 
 def set_custom_background():
     st.markdown(
@@ -54,6 +58,8 @@ set_custom_background()
 
 df = pd.read_csv('C:/Users/34666/Desktop/Oriol bootcamp the bridge/Curso/MachineLearningProject/MachineLearningProject/Data/raw/weather_prediction_dataset.csv')
 # Cargar modelo y codificador entrenados
+import os
+
 def cargar_modelo():
     return load_model("../Models/modelo_meteorologico.h5")
 
